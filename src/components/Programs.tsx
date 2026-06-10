@@ -47,9 +47,9 @@ const programs: ProgramData[] = [
     accentColor: '#84cc16',
   },
   {
-    id: 'walljam',
-    tab: 'Wall Jam',
-    title: 'Wall Jam',
+    id: 'worldjam',
+    tab: 'World Jam',
+    title: 'World Jam',
     subtitle: 'Groove. Sweat. Conquer.',
     description:
       'An electrifying hip-hop inspired dance workout full of neon energy and global beats. Perfect for building strength while having the time of your life.',
@@ -221,12 +221,24 @@ export default function Programs() {
                 </svg>
               </div>
 
+              {/* ── White backdrop to fully mask baked-in text from pizza image ── */}
+              <div
+                className="absolute z-29 rounded-full bg-white pointer-events-none"
+                style={{
+                  width: 160,
+                  height: 160,
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              />
+
               {/* ── Center logo bubble ── */}
               <div
                 className="pizza-center absolute z-30 rounded-full bg-white shadow-xl flex flex-col items-center justify-center pointer-events-none border-4"
                 style={{
-                  width: 110,
-                  height: 110,
+                  width: 140,
+                  height: 140,
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
@@ -237,7 +249,7 @@ export default function Programs() {
                 <Image
                   src="/images/logo-purple.png"
                   alt="FitNoD"
-                  width={75}
+                  width={90}
                   height={30}
                   className="object-contain"
                 />
