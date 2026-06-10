@@ -117,37 +117,6 @@ const programs: ProgramData[] = [
   },
 ];
 
-// Each slice: quadrant direction + individual image + SVG clip-path
-const SLICES = [
-  {
-    q: 'q-tr',
-    image: '/images/slice-warmup.png',
-    // Top-right quarter circle: center → top → right-arc → center
-    clipPath: 'path("M 230 230 L 230 0 A 230 230 0 0 1 460 230 Z")',
-    borderColor: '#84cc16',
-  },
-  {
-    q: 'q-br',
-    image: '/images/slice-worldjam.png',
-    // Bottom-right quarter circle
-    clipPath: 'path("M 230 230 L 460 230 A 230 230 0 0 1 230 460 Z")',
-    borderColor: '#7B2DFF',
-  },
-  {
-    q: 'q-bl',
-    image: '/images/slice-powerslam.png',
-    // Bottom-left quarter circle
-    clipPath: 'path("M 230 230 L 230 460 A 230 230 0 0 1 0 230 Z")',
-    borderColor: '#ef4444',
-  },
-  {
-    q: 'q-tl',
-    image: '/images/slice-desitadka.png',
-    // Top-left quarter circle
-    clipPath: 'path("M 230 230 L 0 230 A 230 230 0 0 1 230 0 Z")',
-    borderColor: '#f59e0b',
-  },
-] as const;
 
 export default function Programs() {
   const [activeTab, setActiveTab] = useState<number | null>(null);
@@ -162,6 +131,9 @@ export default function Programs() {
     setActiveTab(prev => (prev === idx ? null : idx));
   };
 
+  // Which slice is "highlighted" (hovered or active)
+  const highlightedSlice = hoveredSlice ?? activeTab;
+
   return (
     <section id="programs" className="section-padding" style={{ background: 'var(--color-accent-bg)' }}>
       <style>{`
@@ -171,28 +143,69 @@ export default function Programs() {
         }
         .animate-slice { animation: sliceSlideUp 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
-        /* Individual slice pull-out transitions */
-        .pizza-slice-ind {
-          position: absolute;
-          inset: 0;
-          transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
-          will-change: transform;
-          cursor: pointer;
+        /* Pizza container - responsive */
+        .pizza-outer {
+          width: 460px;
+          height: 460px;
+          position: relative;
+          flex-shrink: 0;
         }
-        .pizza-slice-ind img { object-fit: cover; }
 
-        /* Pull-out directions per quadrant */
-        .pizza-slice-ind.q-tr:hover, .pizza-slice-ind.q-tr.active-q { transform: translate(12px, -12px) scale(1.05); }
-        .pizza-slice-ind.q-br:hover, .pizza-slice-ind.q-br.active-q { transform: translate(12px, 12px) scale(1.05); }
-        .pizza-slice-ind.q-bl:hover, .pizza-slice-ind.q-bl.active-q { transform: translate(-12px, 12px) scale(1.05); }
-        .pizza-slice-ind.q-tl:hover, .pizza-slice-ind.q-tl.active-q { transform: translate(-12px, -12px) scale(1.05); }
+        /* SVG slice hover zone */
+        .pizza-svg-zone {
+          cursor: pointer;
+          transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+        .pizza-svg-zone:hover {
+          filter: drop-shadow(0 0 8px rgba(123,45,255,0.5));
+        }
 
-        /* Mobile: pizza is smaller */
-        @media (max-width: 767px) {
-          .pizza-wrap { width: 300px !important; height: 300px !important; }
-          .pizza-center { width: 80px !important; height: 80px !important; }
-          .pizza-center img { width: 55px !important; height: 20px !important; }
-          .pizza-back { width: 90px !important; height: 90px !important; }
+        /* Dim overlay for non-active slices */
+        .pizza-dim-overlay {
+          pointer-events: none;
+          transition: opacity 0.35s ease;
+        }
+
+        /* Pulse glow on active ring */
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 0 6px rgba(123,45,255,0.15), 0 0 30px rgba(123,45,255,0.1); }
+          50% { box-shadow: 0 0 0 8px rgba(123,45,255,0.25), 0 0 50px rgba(123,45,255,0.2); }
+        }
+        .pizza-ring-active {
+          animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        /* Center logo */
+        .pizza-center-logo {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 30;
+          border-radius: 50%;
+          background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 4px solid var(--color-primary);
+          box-shadow: 0 0 0 4px var(--color-primary-light), 0 8px 32px rgba(123,45,255,0.3);
+          pointer-events: none;
+          width: 110px;
+          height: 110px;
+        }
+
+        /* Responsive mobile */
+        @media (max-width: 639px) {
+          .pizza-outer { width: 320px !important; height: 320px !important; }
+          .pizza-center-logo { width: 80px !important; height: 80px !important; }
+          .pizza-center-logo img { width: 52px !important; }
+        }
+        @media (min-width: 640px) and (max-width: 767px) {
+          .pizza-outer { width: 380px !important; height: 380px !important; }
+          .pizza-center-logo { width: 95px !important; height: 95px !important; }
+        }
+
+        [data-theme="dark"] .pizza-center-logo {
+          background: #1a1630;
         }
       `}</style>
 
@@ -213,98 +226,117 @@ export default function Programs() {
 
           {/* ─── LEFT: Interactive Pizza ─── */}
           <div className="flex flex-col items-center gap-4 flex-shrink-0">
-            {/* Pizza circle — 4 independent slice images */}
-            <div
-              className="pizza-wrap relative"
-              style={{ width: 460, height: 460 }}
-            >
-              {/* ── 4 independent slices with their own image + clip-path ── */}
-              {SLICES.map((slice, idx) => (
-                <div
-                  key={slice.q}
-                  className={`pizza-slice-ind ${slice.q} ${activeTab === idx ? 'active-q' : ''}`}
-                  style={{ clipPath: slice.clipPath }}
-                  onClick={() => handleSliceClick(idx)}
-                  onMouseEnter={() => setHoveredSlice(idx)}
-                  onMouseLeave={() => setHoveredSlice(null)}
-                  title={`Select ${programs[idx].title}`}
-                >
-                  {/* Individual slice image */}
-                  <Image
-                    src={slice.image}
-                    alt={programs[idx].title}
-                    fill
-                    className="object-cover"
-                    sizes="460px"
-                    priority={idx < 2}
-                  />
-                  {/* Colored border arc overlay on active */}
-                  {(hoveredSlice === idx || activeTab === idx) && (
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: `radial-gradient(circle at 50% 50%, transparent 45%, ${slice.borderColor}55 100%)`,
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
+            <div className="pizza-outer">
 
-              {/* ── Thin white divider cross ── */}
-              <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 20 }}>
-                <svg viewBox="0 0 460 460" className="w-full h-full">
-                  <line x1="230" y1="0" x2="230" y2="460" stroke="white" strokeWidth="4" opacity="0.9" />
-                  <line x1="0" y1="230" x2="460" y2="230" stroke="white" strokeWidth="4" opacity="0.9" />
-                </svg>
+              {/* ── The pizza image (single image, scales with container) ── */}
+              <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl"
+                style={{ border: '6px solid var(--color-primary)', boxShadow: '0 0 0 3px var(--color-primary-light), 0 12px 40px rgba(123,45,255,0.2)' }}
+              >
+                <Image
+                  src="/images/pizza-wheel-final.png"
+                  alt="FitNoD Fitness Pizza — 4 Programs"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 639px) 320px, (max-width: 767px) 380px, 460px"
+                  priority
+                />
+
+                {/* ── Dim overlays for non-highlighted slices ── */}
+                {highlightedSlice !== null && (
+                  <>
+                    {/* Top-right: Warm Up (idx 0) */}
+                    {highlightedSlice !== 0 && (
+                      <div className="pizza-dim-overlay absolute" style={{ top: 0, left: '50%', width: '50%', height: '50%', background: 'rgba(0,0,0,0.45)', opacity: 1 }} />
+                    )}
+                    {/* Bottom-right: World Jam (idx 1) */}
+                    {highlightedSlice !== 1 && (
+                      <div className="pizza-dim-overlay absolute" style={{ top: '50%', left: '50%', width: '50%', height: '50%', background: 'rgba(0,0,0,0.45)', opacity: 1 }} />
+                    )}
+                    {/* Bottom-left: Power Slam (idx 2) */}
+                    {highlightedSlice !== 2 && (
+                      <div className="pizza-dim-overlay absolute" style={{ top: '50%', left: 0, width: '50%', height: '50%', background: 'rgba(0,0,0,0.45)', opacity: 1 }} />
+                    )}
+                    {/* Top-left: Desi Tadka (idx 3) */}
+                    {highlightedSlice !== 3 && (
+                      <div className="pizza-dim-overlay absolute" style={{ top: 0, left: 0, width: '50%', height: '50%', background: 'rgba(0,0,0,0.45)', opacity: 1 }} />
+                    )}
+                  </>
+                )}
               </div>
 
-              {/* ── Center white mask (covers slice edges) ── */}
-              <div
-                className="pizza-back absolute rounded-full bg-white pointer-events-none"
-                style={{
-                  width: 150, height: 150,
-                  top: '50%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: 28,
-                }}
-              />
-
-              {/* ── Center logo bubble ── */}
-              <div
-                className="pizza-center absolute rounded-full bg-white flex items-center justify-center pointer-events-none border-4"
-                style={{
-                  width: 130, height: 130,
-                  top: '50%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: 30,
-                  borderColor: 'var(--color-primary)',
-                  boxShadow: `0 0 0 4px var(--color-primary-light), 0 8px 32px rgba(123,45,255,0.3)`,
-                }}
+              {/* ── Invisible interactive SVG overlay (click/hover zones) ── */}
+              <svg
+                viewBox="0 0 100 100"
+                className="absolute inset-0 w-full h-full z-10"
+                style={{ borderRadius: '50%' }}
               >
+                {/* Divider lines */}
+                <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.6" opacity="0.7" />
+                <line x1="0" y1="50" x2="100" y2="50" stroke="white" strokeWidth="0.6" opacity="0.7" />
+
+                {/* Top-right: Warm Up (idx 0) */}
+                <path
+                  d="M 50 50 L 50 0 A 50 50 0 0 1 100 50 Z"
+                  className="pizza-svg-zone"
+                  fill={highlightedSlice === 0 ? 'rgba(132,204,22,0.15)' : 'transparent'}
+                  onClick={() => handleSliceClick(0)}
+                  onMouseEnter={() => setHoveredSlice(0)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                />
+                {/* Bottom-right: World Jam (idx 1) */}
+                <path
+                  d="M 50 50 L 100 50 A 50 50 0 0 1 50 100 Z"
+                  className="pizza-svg-zone"
+                  fill={highlightedSlice === 1 ? 'rgba(123,45,255,0.15)' : 'transparent'}
+                  onClick={() => handleSliceClick(1)}
+                  onMouseEnter={() => setHoveredSlice(1)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                />
+                {/* Bottom-left: Power Slam (idx 2) */}
+                <path
+                  d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 Z"
+                  className="pizza-svg-zone"
+                  fill={highlightedSlice === 2 ? 'rgba(239,68,68,0.15)' : 'transparent'}
+                  onClick={() => handleSliceClick(2)}
+                  onMouseEnter={() => setHoveredSlice(2)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                />
+                {/* Top-left: Desi Tadka (idx 3) */}
+                <path
+                  d="M 50 50 L 0 50 A 50 50 0 0 1 50 0 Z"
+                  className="pizza-svg-zone"
+                  fill={highlightedSlice === 3 ? 'rgba(245,158,11,0.15)' : 'transparent'}
+                  onClick={() => handleSliceClick(3)}
+                  onMouseEnter={() => setHoveredSlice(3)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                />
+              </svg>
+
+              {/* ── Center logo ── */}
+              <div className="pizza-center-logo">
                 <Image
                   src="/images/logo-purple.png"
                   alt="FitNoD"
-                  width={88}
-                  height={28}
+                  width={72}
+                  height={24}
                   className="object-contain"
                 />
               </div>
 
-              {/* ── Active glow ring ── */}
+              {/* ── Outer glow ring (pulses when active) ── */}
               <div
-                className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
+                className={`absolute inset-[-6px] rounded-full pointer-events-none transition-all duration-500 ${activeTab !== null ? 'pizza-ring-active' : ''}`}
                 style={{
-                  zIndex: 5,
                   boxShadow: activeTab !== null
-                    ? `0 0 0 5px rgba(123,45,255,0.2), 0 0 50px rgba(123,45,255,0.15)`
-                    : `0 0 0 3px rgba(123,45,255,0.08)`,
+                    ? '0 0 0 6px rgba(123,45,255,0.15), 0 0 30px rgba(123,45,255,0.1)'
+                    : '0 0 0 0 transparent',
                 }}
               />
             </div>
 
             {/* Click hint */}
-            <p className="text-sm font-outfit italic mt-2" style={{ color: 'var(--color-primary)' }}>
-              ↑ Click on a slice to explore ↑
+            <p className="text-sm font-outfit italic mt-1" style={{ color: 'var(--color-primary)', opacity: 0.8 }}>
+              Click on a slice to explore
             </p>
           </div>
 

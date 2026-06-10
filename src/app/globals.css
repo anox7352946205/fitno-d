@@ -317,47 +317,8 @@ h1, h2, h3, h4, h5, h6 {
   animation: shimmer 3s infinite;
 }
 
-/* ───────────────────────────────────────────
-   PIZZA SLICE ANIMATIONS
-──────────────────────────────────────────── */
-.pizza-container {
-  position: relative;
-  border-radius: 50%;
-  cursor: pointer;
-}
+/* Pizza styles are now inline in Programs.tsx */
 
-/* Each quadrant wrapper */
-.pizza-slice-q {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: 50%;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-}
-
-/* Top-right: Warm Up — pull up-right */
-.pizza-slice-q.q-tr:hover { transform: translate(10px, -10px) scale(1.04); }
-/* Bottom-right: Wall Jam — pull down-right */
-.pizza-slice-q.q-br:hover { transform: translate(10px, 10px) scale(1.04); }
-/* Bottom-left: Power Slam — pull down-left */
-.pizza-slice-q.q-bl:hover { transform: translate(-10px, 10px) scale(1.04); }
-/* Top-left: Desi Tadka — pull up-left */
-.pizza-slice-q.q-tl:hover { transform: translate(-10px, -10px) scale(1.04); }
-
-/* Active (clicked) state */
-.pizza-slice-q.active-tr { transform: translate(14px, -14px) scale(1.06); }
-.pizza-slice-q.active-br { transform: translate(14px, 14px) scale(1.06); }
-.pizza-slice-q.active-bl { transform: translate(-14px, 14px) scale(1.06); }
-.pizza-slice-q.active-tl { transform: translate(-14px, -14px) scale(1.06); }
-
-/* Glow ring on active */
-.pizza-slice-q.active-tr,
-.pizza-slice-q.active-br,
-.pizza-slice-q.active-bl,
-.pizza-slice-q.active-tl {
-  filter: drop-shadow(0 0 12px rgba(123,45,255,0.6));
-}
 
 /* ───────────────────────────────────────────
    NAV
