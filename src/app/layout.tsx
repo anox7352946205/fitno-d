@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FloatingCTA from "@/components/FloatingCTA";
+import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "FitNoD — Dance Your Way To Fitness | India's #1 Dance Fitness Program",
@@ -36,8 +38,6 @@ export const metadata: Metadata = {
   },
 };
 
-import FloatingCTA from "@/components/FloatingCTA";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -45,7 +45,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      {/* Prevent flash of wrong theme */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('fitnod-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
+        <ThemeProvider />
         {children}
         <FloatingCTA />
       </body>

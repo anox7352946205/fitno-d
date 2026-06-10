@@ -14,6 +14,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -21,21 +22,32 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Read initial theme
+  useEffect(() => {
+    const saved = localStorage.getItem('fitnod-theme') || 'light';
+    setIsDark(saved === 'dark');
+  }, []);
+
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
+  const toggleTheme = () => {
+    const next = isDark ? 'light' : 'dark';
+    setIsDark(!isDark);
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('fitnod-theme', next);
+  };
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300 ${
-          scrolled ? 'shadow-md' : ''
+        className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
+          scrolled ? 'shadow-[0_4px_20px_rgba(123,45,255,0.12)]' : ''
         }`}
       >
         <div className="container-max mx-auto flex items-center justify-between px-6 py-4">
@@ -62,22 +74,50 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Desktop CTA */}
-          <a href="#pricing" className="btn-primary hidden lg:inline-flex">
-            Join FitNoD
-          </a>
+          {/* Desktop: Theme Toggle + CTA */}
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Theme Toggle */}
+            <button
+              type="button"
+              aria-label="Toggle dark/light mode"
+              className="theme-toggle"
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              <div className="theme-toggle-thumb">
+                {isDark ? '🌙' : '☀️'}
+              </div>
+            </button>
 
-          {/* Mobile Hamburger */}
-          <button
-            type="button"
-            aria-label="Open menu"
-            className="flex flex-col items-center justify-center gap-[5px] lg:hidden"
-            onClick={() => setMenuOpen(true)}
-          >
-            <span className="block h-[2px] w-6 rounded bg-text" />
-            <span className="block h-[2px] w-6 rounded bg-text" />
-            <span className="block h-[2px] w-6 rounded bg-text" />
-          </button>
+            <a href="#pricing" className="btn-primary btn-shimmer">
+              Join FitNoD
+            </a>
+          </div>
+
+          {/* Mobile: Theme toggle + Hamburger */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              type="button"
+              aria-label="Toggle dark/light mode"
+              className="theme-toggle"
+              onClick={toggleTheme}
+            >
+              <div className="theme-toggle-thumb">
+                {isDark ? '🌙' : '☀️'}
+              </div>
+            </button>
+
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="flex flex-col items-center justify-center gap-[5px]"
+              onClick={() => setMenuOpen(true)}
+            >
+              <span className="block h-[2px] w-6 rounded bg-current" style={{ color: 'var(--color-text)' }} />
+              <span className="block h-[2px] w-6 rounded bg-current" style={{ color: 'var(--color-text)' }} />
+              <span className="block h-[2px] w-6 rounded bg-current" style={{ color: 'var(--color-text)' }} />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -90,11 +130,7 @@ export default function Navbar() {
       {/* Mobile Drawer */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <div className="flex items-center justify-between px-6 py-4">
-          <a
-            href="#hero"
-            className="flex items-center"
-            onClick={closeMenu}
-          >
+          <a href="#hero" className="flex items-center" onClick={closeMenu}>
             <Image
               src="/images/logo-purple.png"
               alt="FitNoD"
@@ -110,17 +146,7 @@ export default function Navbar() {
             className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-accent-bg"
             onClick={closeMenu}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -142,11 +168,7 @@ export default function Navbar() {
         </ul>
 
         <div className="px-6 pt-6">
-          <a
-            href="#pricing"
-            className="btn-primary w-full text-center"
-            onClick={closeMenu}
-          >
+          <a href="#pricing" className="btn-primary w-full text-center" onClick={closeMenu}>
             Join FitNoD
           </a>
         </div>
