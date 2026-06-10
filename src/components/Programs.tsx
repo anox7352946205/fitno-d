@@ -117,9 +117,37 @@ const programs: ProgramData[] = [
   },
 ];
 
-// Map index → quadrant class
-const QUADRANT = ['q-tr', 'q-br', 'q-bl', 'q-tl'] as const;
-const ACTIVE_CLASS = ['active-tr', 'active-br', 'active-bl', 'active-tl'] as const;
+// Each slice: quadrant direction + individual image + SVG clip-path
+const SLICES = [
+  {
+    q: 'q-tr',
+    image: '/images/slice-warmup.png',
+    // Top-right quarter circle: center → top → right-arc → center
+    clipPath: 'path("M 230 230 L 230 0 A 230 230 0 0 1 460 230 Z")',
+    borderColor: '#84cc16',
+  },
+  {
+    q: 'q-br',
+    image: '/images/slice-worldjam.png',
+    // Bottom-right quarter circle
+    clipPath: 'path("M 230 230 L 460 230 A 230 230 0 0 1 230 460 Z")',
+    borderColor: '#7B2DFF',
+  },
+  {
+    q: 'q-bl',
+    image: '/images/slice-powerslam.png',
+    // Bottom-left quarter circle
+    clipPath: 'path("M 230 230 L 230 460 A 230 230 0 0 1 0 230 Z")',
+    borderColor: '#ef4444',
+  },
+  {
+    q: 'q-tl',
+    image: '/images/slice-desitadka.png',
+    // Top-left quarter circle
+    clipPath: 'path("M 230 230 L 0 230 A 230 230 0 0 1 230 0 Z")',
+    borderColor: '#f59e0b',
+  },
+] as const;
 
 export default function Programs() {
   const [activeTab, setActiveTab] = useState<number | null>(null);
@@ -143,17 +171,28 @@ export default function Programs() {
         }
         .animate-slice { animation: sliceSlideUp 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
-        /* Clip paths — images inside each quadrant */
-        .clip-tr { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%); }
-        .clip-br { clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%); }
-        .clip-bl { clip-path: polygon(50% 50%, 50% 100%, 0% 100%, 0% 50%); }
-        .clip-tl { clip-path: polygon(50% 50%, 0% 50%, 0% 0%, 50% 0%); }
+        /* Individual slice pull-out transitions */
+        .pizza-slice-ind {
+          position: absolute;
+          inset: 0;
+          transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+          will-change: transform;
+          cursor: pointer;
+        }
+        .pizza-slice-ind img { object-fit: cover; }
+
+        /* Pull-out directions per quadrant */
+        .pizza-slice-ind.q-tr:hover, .pizza-slice-ind.q-tr.active-q { transform: translate(12px, -12px) scale(1.05); }
+        .pizza-slice-ind.q-br:hover, .pizza-slice-ind.q-br.active-q { transform: translate(12px, 12px) scale(1.05); }
+        .pizza-slice-ind.q-bl:hover, .pizza-slice-ind.q-bl.active-q { transform: translate(-12px, 12px) scale(1.05); }
+        .pizza-slice-ind.q-tl:hover, .pizza-slice-ind.q-tl.active-q { transform: translate(-12px, -12px) scale(1.05); }
 
         /* Mobile: pizza is smaller */
         @media (max-width: 767px) {
-          .pizza-wrap { width: 280px !important; height: 280px !important; }
-          .pizza-center { width: 72px !important; height: 72px !important; font-size: 8px !important; }
-          .pizza-center img { width: 50px !important; height: 50px !important; }
+          .pizza-wrap { width: 300px !important; height: 300px !important; }
+          .pizza-center { width: 80px !important; height: 80px !important; }
+          .pizza-center img { width: 55px !important; height: 20px !important; }
+          .pizza-back { width: 90px !important; height: 90px !important; }
         }
       `}</style>
 
@@ -174,94 +213,91 @@ export default function Programs() {
 
           {/* ─── LEFT: Interactive Pizza ─── */}
           <div className="flex flex-col items-center gap-4 flex-shrink-0">
-            {/* Pizza circle */}
+            {/* Pizza circle — 4 independent slice images */}
             <div
-              className="pizza-container pizza-wrap relative"
+              className="pizza-wrap relative"
               style={{ width: 460, height: 460 }}
             >
-              {/* ── Four quadrant slices ── */}
-              {programs.map((prog, idx) => {
-                const qClass = QUADRANT[idx];
-                const activeClass = activeTab === idx ? ACTIVE_CLASS[idx] : '';
-                const clipClass = ['clip-tr', 'clip-br', 'clip-bl', 'clip-tl'][idx];
-                return (
-                  <div
-                    key={prog.id}
-                    className={`pizza-slice-q ${qClass} ${activeClass} ${clipClass}`}
-                    onClick={() => handleSliceClick(idx)}
-                    onMouseEnter={() => setHoveredSlice(idx)}
-                    onMouseLeave={() => setHoveredSlice(null)}
-                    title={`Select ${prog.title}`}
-                  >
-                    <Image
-                      src="/images/pizza-wheel-new.png"
-                      alt={prog.title}
-                      fill
-                      className="object-cover"
-                      sizes="460px"
-                      priority
-                    />
-                    {/* Hover / active tint overlay */}
+              {/* ── 4 independent slices with their own image + clip-path ── */}
+              {SLICES.map((slice, idx) => (
+                <div
+                  key={slice.q}
+                  className={`pizza-slice-ind ${slice.q} ${activeTab === idx ? 'active-q' : ''}`}
+                  style={{ clipPath: slice.clipPath }}
+                  onClick={() => handleSliceClick(idx)}
+                  onMouseEnter={() => setHoveredSlice(idx)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                  title={`Select ${programs[idx].title}`}
+                >
+                  {/* Individual slice image */}
+                  <Image
+                    src={slice.image}
+                    alt={programs[idx].title}
+                    fill
+                    className="object-cover"
+                    sizes="460px"
+                    priority={idx < 2}
+                  />
+                  {/* Colored border arc overlay on active */}
+                  {(hoveredSlice === idx || activeTab === idx) && (
                     <div
-                      className="absolute inset-0 transition-opacity duration-300"
+                      className="absolute inset-0"
                       style={{
-                        background: `radial-gradient(circle at center, ${prog.accentColor}33 0%, transparent 70%)`,
-                        opacity: hoveredSlice === idx || activeTab === idx ? 1 : 0,
+                        background: `radial-gradient(circle at 50% 50%, transparent 45%, ${slice.borderColor}55 100%)`,
                       }}
                     />
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+              ))}
 
-              {/* ── Divider lines ── */}
-              <div className="absolute inset-0 pointer-events-none z-20">
+              {/* ── Thin white divider cross ── */}
+              <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 20 }}>
                 <svg viewBox="0 0 460 460" className="w-full h-full">
-                  <line x1="230" y1="0" x2="230" y2="460" stroke="white" strokeWidth="3" opacity="0.8" />
-                  <line x1="0" y1="230" x2="460" y2="230" stroke="white" strokeWidth="3" opacity="0.8" />
+                  <line x1="230" y1="0" x2="230" y2="460" stroke="white" strokeWidth="4" opacity="0.9" />
+                  <line x1="0" y1="230" x2="460" y2="230" stroke="white" strokeWidth="4" opacity="0.9" />
                 </svg>
               </div>
 
-              {/* ── White backdrop to fully mask baked-in text from pizza image ── */}
+              {/* ── Center white mask (covers slice edges) ── */}
               <div
-                className="absolute z-29 rounded-full bg-white pointer-events-none"
+                className="pizza-back absolute rounded-full bg-white pointer-events-none"
                 style={{
-                  width: 160,
-                  height: 160,
-                  top: '50%',
-                  left: '50%',
+                  width: 150, height: 150,
+                  top: '50%', left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  zIndex: 28,
                 }}
               />
 
               {/* ── Center logo bubble ── */}
               <div
-                className="pizza-center absolute z-30 rounded-full bg-white shadow-xl flex flex-col items-center justify-center pointer-events-none border-4"
+                className="pizza-center absolute rounded-full bg-white flex items-center justify-center pointer-events-none border-4"
                 style={{
-                  width: 140,
-                  height: 140,
-                  top: '50%',
-                  left: '50%',
+                  width: 130, height: 130,
+                  top: '50%', left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  zIndex: 30,
                   borderColor: 'var(--color-primary)',
-                  boxShadow: '0 4px 24px rgba(123,45,255,0.25)',
+                  boxShadow: `0 0 0 4px var(--color-primary-light), 0 8px 32px rgba(123,45,255,0.3)`,
                 }}
               >
                 <Image
                   src="/images/logo-purple.png"
                   alt="FitNoD"
-                  width={90}
-                  height={30}
+                  width={88}
+                  height={28}
                   className="object-contain"
                 />
               </div>
 
-              {/* ── Outer glow ring ── */}
+              {/* ── Active glow ring ── */}
               <div
-                className="absolute inset-0 rounded-full pointer-events-none transition-opacity duration-500"
+                className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
                 style={{
+                  zIndex: 5,
                   boxShadow: activeTab !== null
-                    ? `0 0 0 6px rgba(123,45,255,0.15), 0 0 40px rgba(123,45,255,0.2)`
-                    : '0 0 0 4px rgba(123,45,255,0.08)',
+                    ? `0 0 0 5px rgba(123,45,255,0.2), 0 0 50px rgba(123,45,255,0.15)`
+                    : `0 0 0 3px rgba(123,45,255,0.08)`,
                 }}
               />
             </div>
