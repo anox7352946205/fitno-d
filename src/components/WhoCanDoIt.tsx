@@ -52,7 +52,7 @@ export default function WhoCanDoIt() {
         </div>
 
         <div className="reveal mt-10 text-center">
-          <a href="#app" className="btn-primary btn-shimmer inline-block px-10 py-4 text-lg">
+          <a href="/app" className="btn-primary btn-shimmer inline-block px-10 py-4 text-lg">
             Download the App
           </a>
         </div>

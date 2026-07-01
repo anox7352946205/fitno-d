@@ -8,7 +8,6 @@ import VideoTestimonials from "@/components/VideoTestimonials";
 import Transformations from "@/components/Transformations";
 import { KnowTheCreator, MasterCoach } from "@/components/CreatorSections";
 import Reviews from "@/components/Reviews";
-import AppShowcase from "@/components/AppShowcase";
 import Subscription from "@/components/Subscription";
 import CallbackForm from "@/components/CallbackForm";
 import FAQ from "@/components/FAQ";
@@ -29,7 +28,6 @@ export default function Home() {
         <KnowTheCreator />
         <Reviews />
         <MasterCoach />
-        <AppShowcase />
         <Subscription />
         <CallbackForm />
         <FAQ />

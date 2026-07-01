@@ -68,7 +68,7 @@ export default function Subscription() {
 
             {/* CTA Button */}
             <a
-              href="#app"
+              href="/app"
               className="btn-primary btn-shimmer w-full text-lg py-4 text-center block"
             >
               Download the App

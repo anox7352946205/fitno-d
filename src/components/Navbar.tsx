@@ -6,7 +6,7 @@ import Image from 'next/image';
 const NAV_LINKS = [
   { label: 'Programs', href: '#fitness-pizza' },
   { label: 'Testimonials', href: '#testimonials' },
-  { label: 'App', href: '#app' },
+  { label: 'App', href: '/app' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
 ] as const;
@@ -61,7 +61,7 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            <a href="#app" className="btn-primary btn-shimmer">
+            <a href="/app" className="btn-primary btn-shimmer">
               Download the App
             </a>
           </div>
@@ -129,7 +129,7 @@ export default function Navbar() {
         </ul>
 
         <div className="px-6 pt-6">
-          <a href="#app" className="btn-primary w-full text-center" onClick={closeMenu}>
+          <a href="/app" className="btn-primary w-full text-center" onClick={closeMenu}>
             Download the App
           </a>
         </div>

@@ -29,7 +29,7 @@ export default function WhatIsFitnod() {
                 — It is India&apos;s most unique Dance for Fitness Program where every beat burns calories,
                 every step builds confidence, and every session feels like a celebration!
               </p>
-              <a href="#app" className="btn-primary btn-shimmer inline-block px-8 py-4 text-base">
+              <a href="/app" className="btn-primary btn-shimmer inline-block px-8 py-4 text-base">
                 Download the App
               </a>
             </div>

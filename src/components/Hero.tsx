@@ -80,7 +80,7 @@ export default function Hero() {
         ref={heroRef}
         className="reveal relative z-10 w-full max-w-[1920px] mx-auto px-0 md:px-6 mt-4"
       >
-        <a href="#app" className="block relative w-full group transition-transform duration-300 hover:scale-[1.01]">
+        <a href="/app" className="block relative w-full group transition-transform duration-300 hover:scale-[1.01]">
           <Image
             src="/images/hero-new.png"
             alt="FitNo-D – Fitness! Dance! Fun! Download the app"
@@ -95,7 +95,7 @@ export default function Hero() {
       {/* CTA Buttons */}
       <div ref={statsRef} className="reveal relative z-10 mt-8 flex flex-col sm:flex-row items-center gap-4">
         <a
-          href="#app"
+          href="/app"
           className="btn-primary btn-shimmer px-10 py-4 text-lg whitespace-nowrap shrink-0 hover:scale-105"
         >
           Become a FitNo-Fam Member

@@ -397,7 +397,7 @@ export default function Programs() {
                 {/* Download CTA */}
                 <div className="pt-2">
                   <a
-                    href="#app"
+                    href="/app"
                     className="btn-primary btn-shimmer w-full text-center text-base py-4"
                   >
                     Download the App
@@ -419,7 +419,7 @@ export default function Programs() {
           <p className="mt-3 text-base md:text-lg" style={{ color: 'var(--color-text-muted)' }}>
             Download the FitNo-D app and start your journey today.
           </p>
-          <a href="#app" className="btn-primary btn-shimmer mt-6 inline-block px-10 py-4 text-lg">
+          <a href="/app" className="btn-primary btn-shimmer mt-6 inline-block px-10 py-4 text-lg">
             Download the App
           </a>
         </div>
