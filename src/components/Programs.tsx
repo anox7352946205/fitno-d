@@ -11,6 +11,7 @@ interface ProgramData {
   subtitle: string;
   description: string;
   benefits: string[];
+  videoThumbnail: string;
   accentColor: string;
 }
 
@@ -28,6 +29,7 @@ const programs: ProgramData[] = [
       '💪 Prepares muscles for action',
       '⚡ Reduces injury risk',
     ],
+    videoThumbnail: '/images/warmup-program.png',
     accentColor: '#84cc16',
   },
   {
@@ -43,6 +45,7 @@ const programs: ProgramData[] = [
       '🕺 Enhances coordination & agility',
       '🌬️ Increases stamina',
     ],
+    videoThumbnail: '/images/walljam-program.png',
     accentColor: '#7B2DFF',
   },
   {
@@ -58,6 +61,7 @@ const programs: ProgramData[] = [
       '⚡ Strengthens core & posture',
       '🔥 Boosts metabolism',
     ],
+    videoThumbnail: '/images/powerslam-program.png',
     accentColor: '#ef4444',
   },
   {
@@ -73,6 +77,7 @@ const programs: ProgramData[] = [
       '💃 Improves flexibility & rhythm',
       '🌟 Leaves you energized, not exhausted',
     ],
+    videoThumbnail: '/images/desitadka-program.png',
     accentColor: '#f59e0b',
   },
 ];
