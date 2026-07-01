@@ -13,34 +13,12 @@ export default function LeadPopup() {
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    // Show popup after 3 seconds if not submitted or dismissed recently
-    const hasSubmitted = localStorage.getItem('fitnod-lead-submitted');
-    const hasDismissed = localStorage.getItem('fitnod-lead-dismissed');
-    const dismissTime = localStorage.getItem('fitnod-lead-dismiss-time');
-
-    let shouldShow = !hasSubmitted;
-
-    // If dismissed, check if 24 hours have passed to show it again
-    if (hasDismissed && dismissTime) {
-      const timePassed = Date.now() - parseInt(dismissTime, 10);
-      const oneDay = 24 * 60 * 60 * 1000;
-      if (timePassed < oneDay) {
-        shouldShow = false;
-      }
-    }
-
-    if (shouldShow) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
+    // Open immediately on mount with zero delay
+    setIsOpen(true);
   }, []);
 
   const handleDismiss = () => {
     setIsOpen(false);
-    localStorage.setItem('fitnod-lead-dismissed', 'true');
-    localStorage.setItem('fitnod-lead-dismiss-time', Date.now().toString());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
