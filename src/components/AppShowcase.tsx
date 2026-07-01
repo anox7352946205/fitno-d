@@ -31,10 +31,10 @@ export default function AppShowcase() {
           {/* Left Side: Content */}
           <div className="lg:w-1/2">
             <span className="section-label">Mobile App</span>
-            <h2 className="section-title mt-4">Experience The FitNoD App</h2>
-            <p className="text-text-muted text-lg leading-relaxed mb-10">
+            <h2 className="section-title mt-4">Experience The FitNo-D App</h2>
+            <p className="text-lg leading-relaxed mb-10" style={{ color: 'var(--color-text-muted)' }}>
               Your complete dance fitness studio in your pocket. Stream workouts,
-              track progress, and connect with the community — anytime, anywhere.
+              track progress, and connect with the FitNo-Fam community — anytime, anywhere.
             </p>
 
             {/* Feature Grid */}

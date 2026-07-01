@@ -1,14 +1,15 @@
 'use client';
+
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const reviews = [
   {
-    quote: 'At 60, I feel more energetic than I did at 40. Thank you FitNoD!',
+    quote: 'At 60, I feel more energetic than I did at 40. FitNo-D changed my life!',
     name: 'Suresh K.',
     designation: 'Retired Teacher',
   },
   {
-    quote: "The community here is incredible. It's not just fitness, it's family.",
+    quote: "The community here is incredible. It's not just fitness, it's family — FitNo-Fam!",
     name: 'Nisha M.',
     designation: 'Homemaker',
   },
@@ -18,61 +19,90 @@ const reviews = [
     designation: 'IT Professional',
   },
   {
-    quote: 'My kids and I do FitNoD together. Best family activity ever!',
+    quote: 'My kids and I do FitNo-D together. Best family activity ever!',
     name: 'Pooja T.',
     designation: 'Mother of 2',
   },
   {
-    quote: 'No boring gym routines. Just pure fun and results!',
+    quote: 'No boring gym routines. Just pure fun and incredible results!',
     name: 'Aditya G.',
     designation: 'College Student',
   },
+  {
+    quote: 'I never thought I could enjoy working out. FitNo-D made me look forward to every session.',
+    name: 'Rekha B.',
+    designation: 'School Teacher',
+  },
+  {
+    quote: "Just 30 minutes a day and I've never felt better. The pizza concept is genius!",
+    name: 'Manoj V.',
+    designation: 'Working Professional',
+  },
+  {
+    quote: 'FitNo-Fam is more than a fitness group — it\'s a lifestyle.',
+    name: 'Priya S.',
+    designation: 'Entrepreneur',
+  },
 ];
 
-// Duplicate for seamless infinite loop
-const duplicatedReviews = [...reviews, ...reviews];
+// Triple for seamless loop
+const tripled = [...reviews, ...reviews, ...reviews];
 
-export default function Reviews() {
+export default function WordsThatStayWithUs() {
   const headerRef = useScrollReveal();
-  const contentRef = useScrollReveal({ delay: 200 });
 
   return (
-    <section className="bg-accent-bg section-padding">
+    <section id="words" className="section-padding" style={{ background: 'var(--color-accent-bg)' }}>
       <div className="container-max">
-        {/* Section Header */}
         <div ref={headerRef} className="reveal text-center mb-12">
-          <span className="section-label">Reviews</span>
-          <h2 className="section-title">Words That Stay With Us</h2>
+          <span className="section-label">Community Love</span>
+          <h2 className="section-title">
+            Words That <span style={{ color: 'var(--color-primary)' }}>Stay With Us!</span>
+          </h2>
           <p className="section-subtitle mx-auto">
-            Real stories from real people who discovered the joy of moving with
-            FitNoD.
+            Real stories from real people who discovered the joy of moving with FitNo-D.
           </p>
         </div>
       </div>
 
-      {/* Auto-sliding Carousel */}
-      <div ref={contentRef} className="reveal overflow-hidden">
-        <div className="reviews-track flex gap-6">
-          {duplicatedReviews.map((review, index) => (
+      {/* Infinite Auto-Scroll Carousel */}
+      <div className="overflow-hidden">
+        <div
+          className="reviews-track flex gap-6"
+          style={{
+            animation: 'reviewScroll 40s linear infinite',
+          }}
+        >
+          {tripled.map((review, index) => (
             <div
               key={index}
-              className="w-[350px] flex-shrink-0 bg-white rounded-2xl p-8 shadow-sm h-full flex flex-col"
+              className="w-[340px] flex-shrink-0 rounded-2xl p-8 flex flex-col transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg"
+              style={{
+                background: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
+                boxShadow: '0 4px 16px rgba(123,45,255,0.06)',
+              }}
             >
-              <div className="flex text-[#FF8A00] mb-4 text-xl">
-                ★★★★★
+              <div className="flex gap-0.5 mb-4" style={{ color: '#f59e0b' }}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span key={i} className="text-lg">★</span>
+                ))}
               </div>
-              <p className="font-inter text-text leading-relaxed mb-6 italic">
-                "{review.quote}"
+              <p className="font-inter leading-relaxed mb-6 italic flex-1" style={{ color: 'var(--color-text)' }}>
+                &ldquo;{review.quote}&rdquo;
               </p>
-              <div className="flex items-center gap-4 mt-auto">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center font-outfit font-bold text-primary text-xl">
+              <div className="flex items-center gap-3 mt-auto">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-outfit font-bold text-lg flex-shrink-0"
+                  style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
+                >
                   {review.name.charAt(0)}
                 </div>
                 <div>
-                  <h4 className="font-outfit font-semibold text-text">
+                  <h4 className="font-outfit font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
                     {review.name}
                   </h4>
-                  <p className="font-inter text-text-muted text-sm">
+                  <p className="font-inter text-xs" style={{ color: 'var(--color-text-muted)' }}>
                     {review.designation}
                   </p>
                 </div>
@@ -81,6 +111,16 @@ export default function Reviews() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes reviewScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(calc(-340px * ${reviews.length} - 24px * ${reviews.length})); }
+        }
+        .reviews-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 }

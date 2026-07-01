@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 const NAV_LINKS = [
-  { label: 'Programs', href: '#programs' },
+  { label: 'Programs', href: '#fitness-pizza' },
   { label: 'Testimonials', href: '#testimonials' },
   { label: 'App', href: '#app' },
   { label: 'Pricing', href: '#pricing' },
@@ -14,7 +14,6 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -22,26 +21,12 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Read initial theme
-  useEffect(() => {
-    const saved = localStorage.getItem('fitnod-theme') || 'light';
-    setIsDark(saved === 'dark');
-  }, []);
-
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-
-  const toggleTheme = () => {
-    const next = isDark ? 'light' : 'dark';
-    setIsDark(!isDark);
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('fitnod-theme', next);
-  };
 
   return (
     <>
@@ -55,7 +40,7 @@ export default function Navbar() {
           <a href="#hero" className="flex items-center">
             <Image
               src="/images/logo-purple.png"
-              alt="FitNoD - Fitness In The Name Of Dance"
+              alt="FitNo-D – Fitness In The Name Of Dance"
               width={160}
               height={45}
               className="h-10 w-auto"
@@ -74,39 +59,15 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Desktop: Theme Toggle + CTA */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            {/* Theme Toggle */}
-            <button
-              type="button"
-              aria-label="Toggle dark/light mode"
-              className="theme-toggle"
-              onClick={toggleTheme}
-              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <div className="theme-toggle-thumb">
-                {isDark ? '🌙' : '☀️'}
-              </div>
-            </button>
-
-            <a href="#pricing" className="btn-primary btn-shimmer">
-              Join FitNoD
+            <a href="#app" className="btn-primary btn-shimmer">
+              Download the App
             </a>
           </div>
 
-          {/* Mobile: Theme toggle + Hamburger */}
+          {/* Mobile Hamburger */}
           <div className="flex items-center gap-3 lg:hidden">
-            <button
-              type="button"
-              aria-label="Toggle dark/light mode"
-              className="theme-toggle"
-              onClick={toggleTheme}
-            >
-              <div className="theme-toggle-thumb">
-                {isDark ? '🌙' : '☀️'}
-              </div>
-            </button>
-
             <button
               type="button"
               aria-label="Open menu"
@@ -133,7 +94,7 @@ export default function Navbar() {
           <a href="#hero" className="flex items-center" onClick={closeMenu}>
             <Image
               src="/images/logo-purple.png"
-              alt="FitNoD"
+              alt="FitNo-D"
               width={140}
               height={40}
               className="h-9 w-auto"
@@ -168,8 +129,8 @@ export default function Navbar() {
         </ul>
 
         <div className="px-6 pt-6">
-          <a href="#pricing" className="btn-primary w-full text-center" onClick={closeMenu}>
-            Join FitNoD
+          <a href="#app" className="btn-primary w-full text-center" onClick={closeMenu}>
+            Download the App
           </a>
         </div>
       </div>

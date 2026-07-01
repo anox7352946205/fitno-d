@@ -1,60 +1,14 @@
 'use client';
 
 import { useRef } from 'react';
-import Image from 'next/image';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
-const transformations = [
-  {
-    name: 'Meera K.',
-    age: 34,
-    results: [
-      'Lost 15 kg in 6 months',
-      'Reversed pre-diabetes',
-      'Now teaches Zumba locally',
-    ],
-    image: '/images/transformations/t1.jpg',
-  },
-  {
-    name: 'Arjun P.',
-    age: 42,
-    results: [
-      'Lost 20 kg in 8 months',
-      'Blood pressure normalized',
-      'Runs 5K weekly now',
-    ],
-    image: '/images/transformations/t2.jpg',
-  },
-  {
-    name: 'Kavita S.',
-    age: 58,
-    results: [
-      'Lost 8 kg at 58',
-      'Improved joint mobility',
-      'More active than ever',
-    ],
-    image: '/images/transformations/t3.jpg',
-  },
-  {
-    name: 'Rohan D.',
-    age: 28,
-    results: [
-      'Lost 12 kg in 3 months',
-      'Gained muscle definition',
-      'No more gym anxiety',
-    ],
-    image: '/images/transformations/t4.jpg',
-  },
-  {
-    name: 'Sneha R.',
-    age: 31,
-    results: [
-      'Lost 12 kg in 4 months',
-      'Improved stamina & posture',
-      'Dancing is her daily therapy',
-    ],
-    image: '/images/transformations/t5.jpg',
-  },
+const placeholders = [
+  { name: 'Meera K.', weightDiff: '-15 kg', result: 'Reversed pre-diabetes & gained confidence' },
+  { name: 'Arjun P.', weightDiff: '-20 kg', result: 'Blood pressure normalized in 8 months' },
+  { name: 'Kavita S.', weightDiff: '-8 kg', result: 'More active at 58 than ever before' },
+  { name: 'Rohan D.', weightDiff: '-12 kg', result: 'Gained muscle definition, no gym anxiety' },
+  { name: 'Sneha R.', weightDiff: '-12 kg', result: 'Dancing became her daily therapy' },
 ];
 
 export default function Transformations() {
@@ -64,96 +18,115 @@ export default function Transformations() {
 
   const scroll = (direction: 'left' | 'right') => {
     if (!sliderRef.current) return;
-    const scrollAmount = 420;
     sliderRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      left: direction === 'left' ? -380 : 380,
       behavior: 'smooth',
     });
   };
 
   return (
-    <section id="transformations" className="bg-white section-padding">
+    <section id="transformations" className="section-padding bg-white">
       <div className="container-max">
         {/* Section Header */}
         <div ref={headerRef} className="reveal text-center mb-12">
           <span className="section-label">Success Stories</span>
-          <h2 className="section-title">Real Transformations</h2>
+          <h2 className="section-title">
+            FitNo-D <span style={{ color: 'var(--color-primary)' }}>Transformed Them!</span>
+          </h2>
           <p className="section-subtitle mx-auto">
-            Our members don&apos;t just lose weight — they gain confidence, energy,
-            and a new lifestyle.
+            Real results from real people. Placeholder photos — client images coming soon.
           </p>
         </div>
 
         {/* Slider Container */}
         <div ref={contentRef} className="reveal relative group">
-          {/* Navigation Buttons */}
+          {/* Nav buttons */}
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-text w-12 h-12 rounded-full shadow-lg flex items-center justify-center -ml-4 md:-ml-6 hidden md:flex transition-transform hover:scale-110"
-            aria-label="Previous transformation"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-primary-light text-text w-12 h-12 rounded-full shadow-lg hidden md:flex items-center justify-center -ml-6 transition-transform hover:scale-110"
+            aria-label="Previous"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-text w-12 h-12 rounded-full shadow-lg flex items-center justify-center -mr-4 md:-mr-6 hidden md:flex transition-transform hover:scale-110"
-            aria-label="Next transformation"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-primary-light text-text w-12 h-12 rounded-full shadow-lg hidden md:flex items-center justify-center -mr-6 transition-transform hover:scale-110"
+            aria-label="Next"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
 
-          {/* Slider */}
+          {/* Carousel */}
           <div
             ref={sliderRef}
-            className="transform-slider px-6 md:px-8"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {transformations.map((t, index) => (
+            {placeholders.map((t, i) => (
               <div
-                key={index}
-                className="transform-card h-full flex flex-col w-[300px] md:w-[360px] flex-shrink-0 bg-white rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-shadow duration-300"
+                key={i}
+                className="flex-shrink-0 w-[300px] md:w-[340px] snap-start rounded-3xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                style={{
+                  borderColor: 'var(--color-border)',
+                  background: 'var(--color-accent-bg)',
+                }}
               >
-                {/* Transformation Image */}
-                <div className="relative h-64 md:h-72 bg-accent-bg flex-shrink-0">
-                  <Image
-                    src={t.image}
-                    alt={`${t.name}'s transformation`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 300px, 360px"
-                  />
-                  <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-outfit font-semibold px-3 py-1.5 rounded-full">
-                    Before → After
+                {/* Before/After Placeholder */}
+                <div
+                  className="relative flex items-center justify-center"
+                  style={{
+                    height: '240px',
+                    background: 'linear-gradient(135deg, var(--color-primary-light), rgba(123,45,255,0.08))',
+                  }}
+                >
+                  <div className="flex gap-3 items-center">
+                    {/* Before */}
+                    <div
+                      className="w-20 h-28 rounded-xl flex items-center justify-center text-center"
+                      style={{ background: 'rgba(123,45,255,0.1)', border: '2px dashed var(--color-border)' }}
+                    >
+                      <div>
+                        <div className="text-2xl mb-1">📸</div>
+                        <p className="text-[10px] font-outfit font-semibold" style={{ color: 'var(--color-primary)' }}>BEFORE</p>
+                      </div>
+                    </div>
+                    <div className="text-2xl" style={{ color: 'var(--color-primary)' }}>→</div>
+                    {/* After */}
+                    <div
+                      className="w-20 h-28 rounded-xl flex items-center justify-center text-center"
+                      style={{ background: 'rgba(123,45,255,0.1)', border: '2px dashed var(--color-border)' }}
+                    >
+                      <div>
+                        <div className="text-2xl mb-1">📸</div>
+                        <p className="text-[10px] font-outfit font-semibold" style={{ color: 'var(--color-primary)' }}>AFTER</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className="absolute bottom-3 right-3 text-xs font-outfit font-bold px-3 py-1 rounded-full"
+                    style={{ background: 'var(--color-primary)', color: 'white' }}
+                  >
+                    {t.weightDiff}
                   </div>
                 </div>
 
-                {/* Card Content */}
-                <div className="p-6">
-                  <h3 className="font-outfit font-semibold text-lg text-text">
-                    {t.name}{' '}
-                    <span className="text-text-muted font-inter font-normal text-sm">
-                      Age {t.age}
-                    </span>
+                {/* Info */}
+                <div className="p-5">
+                  <h3 className="font-outfit font-bold text-lg mb-1" style={{ color: 'var(--color-text)' }}>
+                    {t.name}
                   </h3>
-
-                  <ul className="mt-4 space-y-2">
-                    {t.results.map((result, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-text">
-                        <span className="text-primary font-bold mt-0.5">✓</span>
-                        <span>{result}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                    {t.result}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
-
-
         </div>
       </div>
     </section>

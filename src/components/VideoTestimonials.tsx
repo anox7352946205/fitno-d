@@ -1,90 +1,54 @@
-interface Testimonial {
-  name: string;
-  story: string;
-  gradient: string;
-}
+'use client';
 
-const testimonials: Testimonial[] = [
-  {
-    name: 'Priya S.',
-    story: 'Lost 12kg in 4 months',
-    gradient: 'from-brand-purple/80 via-brand-purple/40 to-brand-purple/90',
-  },
-  {
-    name: 'Rahul M.',
-    story: 'From couch to dance floor',
-    gradient: 'from-primary/80 via-primary/40 to-primary/90',
-  },
-  {
-    name: 'Sunita D.',
-    story: 'Active at 55 years young',
-    gradient: 'from-secondary/80 via-secondary/40 to-secondary/90',
-  },
-];
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 export default function VideoTestimonials() {
+  const headerRef = useScrollReveal();
+  const contentRef = useScrollReveal({ delay: 200 });
+
   return (
-    <section id="testimonials" className="bg-accent-bg section-padding">
+    <section id="testimonials" className="section-padding" style={{ background: 'var(--color-accent-bg)' }}>
       <div className="container-max">
         {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
+        <div ref={headerRef} className="reveal text-center mb-12">
           <span className="section-label">Testimonials</span>
-          <h2 className="section-title">Listen What Our Members Say</h2>
-          <p className="section-subtitle mx-auto">
-            Real stories from real members who transformed their lives with
-            FitNoD.
+          <h2 className="section-title">
+            Don&apos;t Believe It.{' '}
+            <span style={{ color: 'var(--color-primary)' }}>Listen To Them.</span>
+          </h2>
+          <p className="section-subtitle mx-auto" style={{ color: 'var(--color-text-muted)' }}>
+            FitNo-Fam Speaks
           </p>
         </div>
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {testimonials.map((testimonial) => (
+        {/* YouTube Video Placeholder */}
+        <div ref={contentRef} className="reveal max-w-3xl mx-auto">
+          <div
+            className="relative w-full rounded-3xl overflow-hidden border-2 flex items-center justify-center flex-col gap-5"
+            style={{
+              aspectRatio: '16/9',
+              background: 'var(--color-bg)',
+              borderColor: 'var(--color-border)',
+              boxShadow: '0 12px 40px rgba(123,45,255,0.1)',
+            }}
+          >
             <div
-              key={testimonial.name}
-              className="group relative rounded-2xl overflow-hidden aspect-[9/16] cursor-pointer transition-transform duration-300 hover:scale-105"
+              className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg"
+              style={{ background: 'var(--color-primary)' }}
             >
-              {/* Gradient Background (placeholder for video) */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-b ${testimonial.gradient}`}
-              />
-
-              {/* Subtle pattern overlay for visual interest */}
-              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8)_1px,transparent_1px)] bg-[length:24px_24px]" />
-
-              {/* Play Button */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-110 border border-white/30">
-                  <svg
-                    className="w-7 h-7 md:w-8 md:h-8 text-white ml-1"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Bottom Info */}
-              <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                <p className="text-white font-outfit font-bold text-lg md:text-xl">
-                  {testimonial.name}
-                </p>
-                <p className="text-white/80 text-sm mt-1">
-                  {testimonial.story}
-                </p>
-                <span className="inline-flex items-center gap-1.5 mt-3 text-white/90 text-xs font-medium uppercase tracking-wider">
-                  <svg
-                    className="w-3.5 h-3.5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  Watch Story
-                </span>
-              </div>
+              <svg className="w-9 h-9 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
             </div>
-          ))}
+            <div className="text-center px-8">
+              <p className="font-outfit font-bold text-lg mb-2" style={{ color: 'var(--color-text)' }}>
+                FitNo-Fam Testimonial Video
+              </p>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                📽️ Full testimonial video coming soon — watch real members share their journey
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

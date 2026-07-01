@@ -1,13 +1,16 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import WhatIsFitnod from "@/components/WhatIsFitnod";
 import Programs from "@/components/Programs";
+import WhoCanDoIt from "@/components/WhoCanDoIt";
+import WhyFitnod from "@/components/WhyFitnod";
 import VideoTestimonials from "@/components/VideoTestimonials";
 import Transformations from "@/components/Transformations";
+import { KnowTheCreator, MasterCoach } from "@/components/CreatorSections";
 import Reviews from "@/components/Reviews";
-import ConsultationCTA from "@/components/ConsultationCTA";
 import AppShowcase from "@/components/AppShowcase";
-import Vault from "@/components/Vault";
 import Subscription from "@/components/Subscription";
+import CallbackForm from "@/components/CallbackForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
@@ -17,14 +20,18 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <WhatIsFitnod />
         <Programs />
+        <WhoCanDoIt />
+        <WhyFitnod />
         <VideoTestimonials />
         <Transformations />
+        <KnowTheCreator />
         <Reviews />
-        <ConsultationCTA />
+        <MasterCoach />
         <AppShowcase />
-        <Vault />
         <Subscription />
+        <CallbackForm />
         <FAQ />
       </main>
       <Footer />
