@@ -109,8 +109,8 @@ export default function Hero() {
           {/* Pulsing ring inside */}
           <span className="absolute inset-0 rounded-full border-2 border-white/20 scale-100 group-hover:scale-[1.03] transition-transform duration-300 pointer-events-none" />
           
-          <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
-            🔥 Become a FitNo Fam 🔥
+          <span className="relative z-10 flex items-center gap-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            ⚡ Become a FitNo Fam ⚡
           </span>
         </a>
       </div>
