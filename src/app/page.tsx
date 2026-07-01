@@ -12,6 +12,7 @@ import Subscription from "@/components/Subscription";
 import CallbackForm from "@/components/CallbackForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import LeadPopup from "@/components/LeadPopup";
 
 export default function Home() {
   return (
@@ -33,6 +34,7 @@ export default function Home() {
         <FAQ />
       </main>
       <Footer />
+      <LeadPopup />
     </>
   );
 }

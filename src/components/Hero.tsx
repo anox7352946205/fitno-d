@@ -93,19 +93,12 @@ export default function Hero() {
       </div>
 
       {/* CTA Buttons */}
-      <div ref={statsRef} className="reveal relative z-10 mt-8 flex flex-col sm:flex-row items-center gap-4">
+      <div ref={statsRef} className="reveal relative z-10 mt-8 flex flex-col items-center gap-4">
         <a
           href="/app"
-          className="btn-primary btn-shimmer px-10 py-4 text-lg whitespace-nowrap shrink-0 hover:scale-105"
+          className="btn-primary btn-shimmer px-14 py-4 text-lg font-bold whitespace-nowrap shrink-0 hover:scale-105"
         >
-          Become a FitNo-Fam Member
-        </a>
-        <a
-          href="#fitness-pizza"
-          className="inline-flex items-center justify-center rounded-xl border-2 px-10 py-4 font-outfit text-lg font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap shrink-0"
-          style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}
-        >
-          Explore Programs
+          FitNo-Fam
         </a>
       </div>
 
