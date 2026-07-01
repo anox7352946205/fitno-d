@@ -126,9 +126,9 @@ export default function LeadPopup() {
               <Image 
                 src="/images/logo-white.png" 
                 alt="FitNo-D" 
-                width={130} 
-                height={36} 
-                className="h-8 w-auto"
+                width={170} 
+                height={48} 
+                className="h-10 sm:h-11 w-auto"
               />
             </div>
 
@@ -137,7 +137,7 @@ export default function LeadPopup() {
               Start Your Dance Fitness Journey! 💃
             </h3>
             <p className="text-white/70 text-sm mb-6 leading-relaxed">
-              Join the **FitNo-Fam**! Submit your details below to get exciting offers, live updates, and direct download links.
+              Join the <span className="font-bold animate-pulse" style={{ color: 'var(--color-primary-light)' }}>FitNo-Fam</span>! Submit your details below to get exciting offers, live updates, and direct download links.
             </p>
 
             {/* Error Message */}

@@ -50,9 +50,9 @@ export default function AppPage() {
             <Image
               src="/images/logo-white.png"
               alt="FitNo-D"
-              width={140}
-              height={40}
-              className="h-8 sm:h-9 w-auto"
+              width={180}
+              height={50}
+              className="h-10 sm:h-11 w-auto"
               priority
             />
           </a>
