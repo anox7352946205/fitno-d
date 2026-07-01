@@ -93,12 +93,25 @@ export default function Hero() {
       </div>
 
       {/* CTA Buttons */}
-      <div ref={statsRef} className="reveal relative z-10 mt-8 flex flex-col items-center gap-4">
+      <div ref={statsRef} className="reveal relative z-10 mt-10 flex flex-col items-center gap-4">
         <a
           href="/app"
-          className="btn-primary btn-shimmer px-14 py-4 text-lg font-bold whitespace-nowrap shrink-0 hover:scale-105"
+          className="relative inline-flex items-center justify-center px-16 py-5 text-xl sm:text-2xl font-black font-outfit uppercase tracking-wider text-white rounded-full overflow-hidden transition-all duration-300 transform hover:scale-110 active:scale-95 hover:rotate-1 group shadow-[0_0_30px_rgba(123,45,255,0.4),0_8px_30px_rgba(255,0,128,0.3)] hover:shadow-[0_0_50px_rgba(123,45,255,0.8),0_12px_45px_rgba(255,0,128,0.6)]"
+          style={{
+            background: 'linear-gradient(135deg, #7B2DFF 0%, #FF007F 50%, #FF8A00 100%)',
+            backgroundSize: '200% 200%',
+            animation: 'gradientShift 3s ease infinite',
+          }}
         >
-          FitNo-Fam
+          {/* Shimmer effect */}
+          <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none" />
+          
+          {/* Pulsing ring inside */}
+          <span className="absolute inset-0 rounded-full border-2 border-white/20 scale-100 group-hover:scale-[1.03] transition-transform duration-300 pointer-events-none" />
+          
+          <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
+            🔥 Become a FitNo Fam 🔥
+          </span>
         </a>
       </div>
 
