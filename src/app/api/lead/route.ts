@@ -7,29 +7,32 @@ export async function POST(request: Request) {
 
     const appsScriptUrl = process.env.APPS_SCRIPT_URL;
 
-    if (appsScriptUrl) {
-      // Forward the request to Google Apps Script Web App
-      const response = await fetch(appsScriptUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    if (!appsScriptUrl) {
+      return NextResponse.json(
+        { 
+          status: 'error', 
+          message: 'Google Sheets integration is not configured yet. Please add the APPS_SCRIPT_URL environment variable in Vercel and redeploy.' 
         },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to forward to Google Sheets Apps Script');
-      }
-    } else {
-      console.warn(
-        'Warning: APPS_SCRIPT_URL environment variable is not defined. Lead logged locally:',
-        { name, email, phone }
+        { status: 400 }
       );
+    }
+
+    // Forward the request to Google Apps Script Web App
+    const response = await fetch(appsScriptUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to forward to Google Sheets Apps Script');
     }
 
     return NextResponse.json({ status: 'success' });

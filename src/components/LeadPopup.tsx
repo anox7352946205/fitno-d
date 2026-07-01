@@ -4,18 +4,13 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function LeadPopup() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-
-  useEffect(() => {
-    // Open immediately on mount with zero delay
-    setIsOpen(true);
-  }, []);
 
   const handleDismiss = () => {
     setIsOpen(false);
