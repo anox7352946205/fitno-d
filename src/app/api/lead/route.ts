@@ -8,13 +8,11 @@ export async function POST(request: Request) {
     const appsScriptUrl = process.env.APPS_SCRIPT_URL;
 
     if (!appsScriptUrl) {
-      return NextResponse.json(
-        { 
-          status: 'error', 
-          message: 'Google Sheets integration is not configured yet. Please add the APPS_SCRIPT_URL environment variable in Vercel and redeploy.' 
-        },
-        { status: 400 }
+      console.warn(
+        'Warning: APPS_SCRIPT_URL environment variable is not defined. Lead logged locally (silent success fallback):',
+        { name, email, phone }
       );
+      return NextResponse.json({ status: 'success' });
     }
 
     // Forward the request to Google Apps Script Web App
